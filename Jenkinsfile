@@ -7,20 +7,20 @@ pipeline {
         SNYK_TOKEN = credentials('snyk-token')
     }
 
-    tools {
-        nodejs 'Node16'
-    }
-
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'npm install --save'
+                nodejs(nodeJSInstallationName: 'Node16') {
+                    sh 'npm install --save'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                sh 'npm test || true'
+                nodejs(nodeJSInstallationName: 'Node16') {
+                    sh 'npm test || true'
+                }
             }
         }
 
@@ -44,11 +44,13 @@ pipeline {
 
         stage('Snyk Security Scan') {
             steps {
-                sh '''
-                npm install -g snyk
-                snyk auth ${SNYK_TOKEN}
-                snyk test --severity-threshold=high || true
-                '''
+                nodejs(nodeJSInstallationName: 'Node16') {
+                    sh '''
+                    npm install -g snyk
+                    snyk auth ${SNYK_TOKEN}
+                    snyk test --severity-threshold=high || true
+                    '''
+                }
             }
         }
     }
