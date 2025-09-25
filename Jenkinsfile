@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
         DOCKERHUB_REPO = credentials('dockerhub-repo-name')
         SNYK_TOKEN = credentials('snyk-token')
     }
@@ -35,7 +34,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                    docker.withRegistry('', 'dockerhub-creds') {
                         docker.image("${DOCKERHUB_REPO}").push("latest")
                     }
                 }
