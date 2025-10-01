@@ -55,6 +55,11 @@ pipeline {
                 }
             }
         }
+        stage('Archive Artifacts') {
+          steps {
+            archiveArtifacts artifacts: 'package.json, package-lock.json, **/npm-debug.log, .snyk, snyk-result.json', allowEmptyArchive: true
+          }
+        }
 
     }
 
